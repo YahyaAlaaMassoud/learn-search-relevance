@@ -1,4 +1,4 @@
-# search-relevance
+# resources for search-relevance
 
 ## datasets
 
