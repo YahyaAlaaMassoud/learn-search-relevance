@@ -25,3 +25,11 @@
   !tar -xzvf training.tar.zip
   !tar -xzvf lesson6.tar
   ```
+
+## tools
+- [`DSPy`](https://github.com/stanfordnlp/dspy): For programming - not prompting - LLMs
+- [`jinja2`](https://pypi.org/project/Jinja2/): For creating prompt templates
+- [`python-dotenv`](https://github.com/theskumar/python-dotenv): For loading .env variables
+- [`poetry`](https://github.com/python-poetry/poetry): For Python package and dep management
+- [`uv`](https://github.com/astral-sh/uv): Package installer written in Rust
+- [`ruff`](https://github.com/astral-sh/ruff): Fast Python linter and code formatter
