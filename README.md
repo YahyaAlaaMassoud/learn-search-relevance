@@ -33,3 +33,7 @@
 - [`poetry`](https://github.com/python-poetry/poetry): For Python package and dep management
 - [`uv`](https://github.com/astral-sh/uv): Package installer written in Rust
 - [`ruff`](https://github.com/astral-sh/ruff): Fast Python linter and code formatter
+- [`sentence-transformers`](https://www.sbert.net/docs/pretrained_models.html): Pretrained models for text/image embedding models
+
+## models
+- [`sentence-transformers/all-MiniLM-L6-v2`](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2)
