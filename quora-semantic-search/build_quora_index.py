@@ -32,6 +32,11 @@ def get_questions(ds):
 
 
 def build_index():
+  collections_names = list(map(lambda x: x.name, qdrant.get_collections().collections))
+  if 'questions' in collections_names:
+    print('index is already there!')
+    return
+  
   quora_ds = load_dataset(path='quora', split='train', streaming=True)
   quora_questions = get_questions(ds=quora_ds)
 
@@ -40,6 +45,9 @@ def build_index():
       vectors_config=models.VectorParams(
           size=encoder.get_sentence_embedding_dimension(),
           distance=models.Distance.COSINE
+      ),
+      optimizers_config=models.OptimizersConfigDiff(
+          memmap_threshold=200000
       )
   )
 
