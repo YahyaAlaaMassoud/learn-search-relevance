@@ -1,6 +1,6 @@
 ### What You'll Find Here
 
-- [`Quora Similar Questions Finder`](https://yalaa-quora-similar-questions.hf.space): Demo on Hugging Face 🤗 Space
+- [`Quora Similar Questions Finder`](https://huggingface.co/spaces/yalaa/quora-similar-questions): Demo on Hugging Face 🤗 Space
 - [`build_quora_index`](https://github.com/YahyaAlaaMassoud/learn-search-relevance/blob/main/tutorials/build_quora_index.py): Script that
   fetches the [Quora Duplicate Questions](https://huggingface.co/datasets/quora) dataset from Hugging Face [datasets](https://huggingface.co/datasets/)
   and creates a vector index using [Qdrant](https://qdrant.tech/) vector database by embedding the questions in the dataset using the [`BAAI/bge-small-en-v1.5`](https://huggingface.co/BAAI/bge-small-en-v1.5)
