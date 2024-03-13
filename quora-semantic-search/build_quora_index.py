@@ -47,7 +47,7 @@ def build_index():
           distance=models.Distance.COSINE
       ),
       optimizers_config=models.OptimizersConfigDiff(
-          memmap_threshold=200000
+          memmap_threshold=200000 # optimize RAM usage https://qdrant.tech/documentation/concepts/storage/
       )
   )
 
