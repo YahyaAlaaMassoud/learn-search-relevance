@@ -31,6 +31,58 @@ def get_questions(ds):
   return [{'question': q} for q in unique_questions]
 
 
+def build_binary_quantized_index():
+  target_collection_name = 'questions-binaryq'
+  collections_names = list(map(lambda x: x.name, qdrant.get_collections().collections))
+  if target_collection_name in collections_names:
+    print('index is already there!')
+    return
+  
+  quora_ds = load_dataset(path='quora', split='train', streaming=True)
+  quora_questions = get_questions(ds=quora_ds)
+
+  qdrant.recreate_collection(
+      collection_name=target_collection_name,
+      vectors_config=models.VectorParams(
+          size=encoder.get_sentence_embedding_dimension(),
+          distance=models.Distance.COSINE,
+          on_disk=True,
+      ),
+      optimizers_config=models.OptimizersConfigDiff(
+          memmap_threshold=200000, # optimize RAM usage https://qdrant.tech/documentation/concepts/storage/
+          default_segment_number=5,
+      ),
+      quantization_config=models.BinaryQuantization(
+          binary=models.BinaryQuantizationConfig(
+            always_ram=True,
+          ),
+      ),
+  )
+
+  question_batch = []
+  for idx, entry in enumerate(tqdm(quora_questions, desc='Uploading vector embeddings in batch size of {}'.format(BATCH_SIZE))):
+    if len(question_batch) < BATCH_SIZE:
+      question_batch.append({
+          'payload': entry,
+          'id': idx
+      })
+    else:
+      questions_list = [item['payload']['question'] for item in question_batch]
+      embedding_batch = compute_embedding(questions_list, encoder).tolist()
+      records = [
+          models.Record(
+              id=entry['id'],
+              payload=entry['payload'],
+              vector=embedding
+          ) for entry, embedding in zip(question_batch, embedding_batch)
+      ]
+      qdrant.upload_records(
+          collection_name=target_collection_name,
+          records=records
+      )
+      question_batch = []
+
+
 def build_index():
   collections_names = list(map(lambda x: x.name, qdrant.get_collections().collections))
   if 'questions' in collections_names:
