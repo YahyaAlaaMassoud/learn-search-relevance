@@ -19,11 +19,17 @@ def build_index(passages, batch_size, start_idx, encoder, collection_name):
       collection_name=collection_name,
       vectors_config=models.VectorParams(
           size=encoder.get_sentence_embedding_dimension(),
-          distance=models.Distance.COSINE
+          distance=models.Distance.COSINE,
+          on_disk=True,
       ),
       optimizers_config=models.OptimizersConfigDiff(
-          memmap_threshold=10000
-      )
+          memmap_threshold=10000,
+          default_segment_number=5,
+          indexing_threshold=0,
+      ),
+      quantization_config=models.BinaryQuantization(
+          binary=models.BinaryQuantizationConfig(always_ram=True),
+      ),
   )
 
   passage_batch = []
@@ -45,7 +51,8 @@ def build_index(passages, batch_size, start_idx, encoder, collection_name):
       ]
       qdrant.upload_records(
           collection_name=collection_name,
-          records=records
+          records=records,
+          parallel=10,
       )
       passage_batch = []
 
