@@ -1,4 +1,7 @@
+import time
+
 from qdrant_client import models
+
 
 def retrieve_top_k(query, top_k, vec_db, encoder, collection_name):
   st = time.time()
@@ -21,6 +24,7 @@ def retrieve_top_k(query, top_k, vec_db, encoder, collection_name):
     top_hits.append({'passage': hit.payload['passage'], 'article_id': hit.payload['article_id'], 'score': hit.score, 'order': (len(results) - i) / len(results)})
 
   return top_hits, query_time
+
 
 def rerank_hits(query, hits, cross_encoder, articles):
   hits_order = {}
@@ -46,6 +50,7 @@ def rerank_hits(query, hits, cross_encoder, articles):
     })
   return reranked_hits, reranking_time
 
+
 def extract_sentence_and_partition(text, sentence):
     # Ensure the sentence exists in the text
     if sentence in text:
@@ -66,6 +71,7 @@ def extract_sentence_and_partition(text, sentence):
     else:
         return ["", "", ""]  # Return empty strings if the sentence is not found
 
+
 def fetch_top_article(hits, articles):
   if not hits:
     return None
@@ -73,10 +79,12 @@ def fetch_top_article(hits, articles):
   top_article = articles[top_hit['article_id']]['content']
   return top_article
 
+
 def fetch_top_passage(hits):
   if not hits:
     return None
   return hits[0]['passage']
+
 
 def fetch_top_article_with_passage_highlighted(hits, articles):
   if not hits:
